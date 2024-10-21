@@ -1,11 +1,11 @@
-class UserModel {
+class User {
   final String uid;
   final String email;
   final String firstName;
   final String profilePicUrl;
   final List<String> favoriteTopics;
 
-  UserModel({
+  User({
     required this.uid,
     required this.email,
     required this.firstName,
@@ -13,8 +13,8 @@ class UserModel {
     required this.favoriteTopics,
   });
 
-  factory UserModel.fromMap(Map<String, dynamic> data) {
-    return UserModel(
+  factory User.fromMap(Map<String, dynamic> data) {
+    return User(
       uid: data['uid'],
       email: data['email'],
       firstName: data['firstName'],
