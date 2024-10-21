@@ -6,13 +6,13 @@ class Hide {
   User user;
   Publication publication;
 
-  Hide(this.id, this.user, this.publication);
+  Hide({required this.id, required this.user, required this.publication});
 
   factory Hide.fromMap(Map<String, dynamic> map) {
     return Hide(
-      map['id'],
-      User.fromMap(map['user'] as Map<String, dynamic>),
-      Publication.fromMap(map['publication'] as Map<String, dynamic>)
+      id: map['id'],
+      user: User.fromMap(map['user'] as Map<String, dynamic>),
+      publication: Publication.fromMap(map['publication'] as Map<String, dynamic>)
     );
   }
 

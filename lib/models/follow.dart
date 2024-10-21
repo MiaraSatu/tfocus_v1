@@ -11,11 +11,11 @@ class Comment {
     required this.followed
   });
 
-  factory Comment.fromJson(Map<String, dynamic> json) {
+  factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
-      id: json['id'],
-      follower: User.fromMap(json['follower'] as Map<String, dynamic>),
-      followed: User.fromMap(json['followed'] as Map<String, dynamic>)
+      id: map['id'],
+      follower: User.fromMap(map['follower'] as Map<String, dynamic>),
+      followed: User.fromMap(map['followed'] as Map<String, dynamic>)
     );
   }
 

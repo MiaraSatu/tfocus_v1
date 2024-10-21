@@ -17,14 +17,14 @@ class Message {
     required this.updatedAt
   });
 
-  factory Message.fromJson(Map<String ,dynamic> json) {
+  factory Message.fromJson(Map<String ,dynamic> map) {
     return Message(
-      id: json['id'],
-      content: json['id'],
-      sender: User.fromMap(json['sender']),
-      receiver: User.fromMap(json['receiver']),
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt']
+      id: map['id'],
+      content: map['id'],
+      sender: User.fromMap(map['sender']),
+      receiver: User.fromMap(map['receiver']),
+      createdAt: map['createdAt'],
+      updatedAt: map['updatedAt']
     );
   }
 
