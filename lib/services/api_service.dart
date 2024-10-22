@@ -20,9 +20,9 @@ class ApiService {
 
   static List<Publication> publications = [
     Publication(id: 1, title: "Pub 1", type: "publication", owner: users[0], content: "Je suis ravi de rejoindre vos communauté", file: "images/externalisation-de-la-paie.jpg"),
-    Publication(id: 2, title: "Pub 1", type: "publication", owner:users[0] , content: "Lorem ipsum delor sit amet", file: "images/logo-ispm.png"),
-    Publication(id: 3, title: "Pub 1", type: "publication", owner: users[1], content: "Amigo dalameta abesitera", file: "images/ion.jpg"),
-    Publication(id: 4, title: "Pub 1", type: "publication", owner:users[3] , content: "ipsum alimona dika ninalke", file: "images/ext2.jpg"),
+    Publication(id: 2, title: "Pub 2", type: "publication", owner:users[0] , content: "Lorem ipsum delor sit amet", file: "images/logo-ispm.png"),
+    Publication(id: 3, title: "Pub 3", type: "publication", owner: users[1], content: "Amigo dalameta abesitera", file: "images/ion.jpg"),
+    Publication(id: 4, title: "Pub 4", type: "publication", owner:users[3] , content: "ipsum alimona dika ninalke", file: "images/ext2.jpg"),
   ];
 
   /*
