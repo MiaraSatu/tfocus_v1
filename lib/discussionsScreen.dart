@@ -61,6 +61,7 @@ class DiscussionsScreen extends StatelessWidget {
       body: Stack(
         children: [
           // background
+          /*
           Positioned.fill(
               child: Container(
                 width: double.infinity,
@@ -73,6 +74,7 @@ class DiscussionsScreen extends StatelessWidget {
                 ),
               )
           ),
+          */
           ListView(
             children: [
               Container(
@@ -113,17 +115,25 @@ class DiscussionsScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
+                  /*
                     gradient: LinearGradient(
                         colors: [Colors.purple.shade900, Colors.purple.shade800],
                         begin: Alignment.topRight,
                         end: Alignment.bottomCenter
                     )
+                   */
+                  color: Colors.white,
+                  gradient: LinearGradient(
+                    colors: [Colors.white, Colors.white, Colors.white,Colors.white,Colors.white10],
+                    begin: Alignment.center,
+                    end: Alignment.bottomCenter
+                  ),
                 ),
                 padding: EdgeInsets.only(left: 30, right: 30, top: 40),
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 30),
+                      margin: EdgeInsets.only(bottom: 15),
                       child: TextField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -154,12 +164,17 @@ class DiscussionsScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(MAR),
                                   border: Border.all(
-                                      color: Colors.grey.shade200,
-                                      width: 2
+                                      // color: Colors.grey.shade200,
+                                    color: Colors.deepPurple,
+                                    width: 2
                                   )
                               ),
                               child: Center(
-                                child: Icon(Icons.add, color: Colors.white,),
+                                child: Icon(
+                                  Icons.add,
+                                  // color: Colors.white,
+                                  color: Colors.deepPurple
+                                ),
                               ),
                             )
                             , ...friends.map((friend) => Container(
@@ -215,8 +230,10 @@ class MessageWidget extends StatelessWidget {
                   Text(
                       message.userName,
                       style: TextStyle(
-                        color: Colors.white70,
+                        // color: Colors.white70,
+                        color: Colors.grey.shade800,
                         fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       )
                   ),
                   Row(
@@ -229,7 +246,8 @@ class MessageWidget extends StatelessWidget {
                           child: Text(
                             message.userActive ? "Active" : "Inactive",
                             style: TextStyle(
-                                color: Colors.white54,
+                                // color: Colors.white54,
+                                color: Colors.grey.shade600,
                                 fontSize: 12
                             ),
                           )
@@ -241,7 +259,8 @@ class MessageWidget extends StatelessWidget {
                     child: Text(
                         message.messageText,
                         style: TextStyle(
-                            color: Colors.white38,
+                            // color: Colors.white38,
+                            color: Colors.grey.shade800,
                             fontSize: 14,
                             overflow: TextOverflow.ellipsis
                         )
@@ -255,7 +274,8 @@ class MessageWidget extends StatelessWidget {
               child: Text(
                 message.sentAt,
                 style: TextStyle(
-                    color: Colors.white54,
+                    // color: Colors.white54,
+                    color: Colors.grey.shade600,
                     fontSize: 12
                 ),
               )

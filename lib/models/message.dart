@@ -17,7 +17,7 @@ class Message {
     required this.updatedAt
   });
 
-  factory Message.fromJson(Map<String ,dynamic> map) {
+  factory Message.fromMap(Map<String ,dynamic> map) {
     return Message(
       id: map['id'],
       content: map['id'],

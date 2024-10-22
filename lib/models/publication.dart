@@ -12,24 +12,31 @@ import 'package:tfocus_v_common_2/models/user.dart';
 
 class Publication {
   int id;
-  String link;
+  String title;
+  String? content;
+  String? link;
   String type;
   String file;
   User owner;
-  Map<String, dynamic> extra;
+  Map<String, dynamic>? extra;
+  String? date;
 
   Publication({
     required this.id,
-    required this.link,
+    required this.title,
+    this.content,
+    this.link,
     required this.type,
     required this.file,
-    required this.extra,
+    this.extra,
     required this.owner
   });
 
   factory Publication.fromMap(Map<String, dynamic> map) {
     return Publication(
       id: map['id'],
+      title: map['title'],
+      content: map['content'],
       link: map['link'],
       type: map['type'],
       file: map['file'],
@@ -41,6 +48,7 @@ class Publication {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'content': content,
       'link': link,
       'type': type,
       'file': file,

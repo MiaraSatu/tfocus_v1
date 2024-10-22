@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/profileContentChangeNotifier.dart';
+import 'package:tfocus_v_common_2/services/api_service.dart';
 
 class MainListItemWidget extends StatefulWidget {
   const MainListItemWidget({super.key});
@@ -80,7 +82,21 @@ class MainListWidget extends StatelessWidget {
 
 class MainListContentWidget extends StatelessWidget {
   static Map<String, Widget> contents = {
-    "All": Text("All is displaied here"),
+    "All": FutureBuilder<List<Publication>>(
+      future: ApiService.fetchPublications(),
+      builder: (context, AsyncSnapshot<List<Publication>> snapshot) {
+        if(snapshot.hasData) {
+          List<Publication> publications = snapshot.data!;
+          return Column(
+            children: publications.map((pub) => PublicationWidget(pub)).toList(),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    ) ,
     "Publications": Text("only publication display here"),
     "Articles": Text("Yes you need to see only shared articles"),
     "Share": Text("only share: pub or articles")
@@ -93,5 +109,24 @@ class MainListContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return contents[item]!;
+  }
+}
+
+
+class PublicationWidget extends StatelessWidget {
+  Publication publication;
+
+  PublicationWidget(this.publication, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(publication.title),
+        ],
+      ),
+    );
   }
 }

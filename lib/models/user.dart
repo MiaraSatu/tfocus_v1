@@ -1,21 +1,21 @@
 class User {
-  final String uid;
+  final int id;
   final String email;
   final String firstName;
-  final String profilePicUrl;
+  final String? profilePicUrl;
   final List<String> favoriteTopics;
 
   User({
-    required this.uid,
+    required this.id,
     required this.email,
     required this.firstName,
-    required this.profilePicUrl,
+    this.profilePicUrl,
     required this.favoriteTopics,
   });
 
   factory User.fromMap(Map<String, dynamic> data) {
     return User(
-      uid: data['uid'],
+      id: data['id'],
       email: data['email'],
       firstName: data['firstName'],
       profilePicUrl: data['profilePicUrl'],
@@ -25,7 +25,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
+      'id': id,
       'email': email,
       'firstName': firstName,
       'profilePicUrl': profilePicUrl,
