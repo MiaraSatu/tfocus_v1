@@ -12,69 +12,80 @@ class CommentFormWidget extends StatefulWidget {
 }
 
 class _CommentFormWidgetState extends State<CommentFormWidget> {
-  bool displayForm = false;
   final TextEditingController _commentCtr = TextEditingController();
 
-  void toggleDisplayForm() {
+  void reinitializeComment() {
     setState(() {
-      displayForm=!displayForm;
+      _commentCtr.text = "";
     });
   }
 
   void submitComment() async {
     bool isSuccess  = await ApiService.commentPublication(widget.publication.id, _commentCtr.text);
     if(isSuccess) {
-      toggleDisplayForm();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Publication${widget.publication.id} commenté avec succèss")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-      (displayForm)
-      ? Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _commentCtr,
-                decoration: const InputDecoration(
-                  labelText: "Your comment",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15))
-                  )
-                ),
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _commentCtr,
+            decoration: const InputDecoration(
+              labelText: "Your comment",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))
+              )
             ),
-            GestureDetector(
-              onTap: () {
-                submitComment();
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 7),
-                padding: EdgeInsets.symmetric(vertical: 12),
-                width: double.infinity,
-                child: Text(
-                  "Commenter",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.blue
-                ),
-              ),
-            ),
-          ],)
-      : Container(
-        child: IconButton(
-          icon: Icon(Icons.comment_outlined),
-          onPressed: () => toggleDisplayForm(),
+          ),
         ),
-      );
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  submitComment();
+                },
+                child: Container(
+                  // margin: EdgeInsets.symmetric(horizontal: 7),
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  child: Text(
+                    "Commenter",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.blue
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  reinitializeComment();
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.red),
+                  ),
+                  child: Text("Réinitialiser", style: TextStyle(color: Colors.red)),
+                ),
+              )
+            ],
+          ),
+        ),
+      ]
+    );
   }
 }

@@ -20,7 +20,13 @@ class ApiService {
   ];
 
   static List<Publication> publications = [
-    ];
+    Publication(id: 1, title: "The first publication", content: "Ca va être difficile d'expliquer comment je me trouve dans cet état",
+    file: "images/externalisation-de-la-paie.jpg", owner: users[2], date: "22-12-24", likeCount: 24),
+    Publication(id: 2, title: "La raison de vivre", content: "Je vais vous expliquer dans un instant comment ça va se passer si vous ne savez pas encore pourquoi vous êtes nés",
+    file: "images/avatars/old_man.jpg", owner: users[1], likeCount: 138, date: "23-10-24"),
+    Publication(id: 3, link: "https://facebook.com/MiaraSatu", file: "https://facebook.com/MiaraSatu/profilePicture", likeCount: 3, owner: users[0], date: "25-10-24"),
+    Publication(id: 4, link: "https://mirabella.hgc/green-day-and-pink-day", file: "https://mirabella.hgc/event/gdpd.png", date: "28-10-24")
+  ];
 
   /*
   * Liste des routes utiles:
@@ -31,11 +37,13 @@ class ApiService {
 
   // SPECIAL FOR PUBLICATION
   static Future<List<Publication>> fetchPublications() async {
+    return publications;
     final response = await http.get(
       Uri.parse(API_URL+"/publications/") // localhost:8000/api/publications
     );
 
     if(200 <= response.statusCode && response.statusCode < 300) {
+      return publications;
       final responseData = jsonDecode(response.body);
       List<Publication> pubs = List<Publication>.from(responseData.map(
         (pubMap) => Publication.fromMap(pubMap as Map<String, dynamic>)
@@ -47,6 +55,7 @@ class ApiService {
   }
 
   static Future<Publication> fetchPublicationDetails(int pubId) async {
+    return publications[2];
     final response = await http.get(
       Uri.parse("$API_URL/publication/$pubId/")
     );

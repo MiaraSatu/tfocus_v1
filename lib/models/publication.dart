@@ -17,7 +17,7 @@ class Publication {
   User? owner;
   Map<String, dynamic>? extra;
   String? date;
-  int? likeCount = 0;
+  int likeCount;
   String? author;
 
   Publication({
@@ -29,7 +29,7 @@ class Publication {
     this.extra,
     this.owner,
     this.date,
-    this.likeCount,
+    this.likeCount=0,
     this.author
   });
 
@@ -43,7 +43,7 @@ class Publication {
       extra: map['extra'],
       owner: map['owner'] == "" ? User.fromMap(map['owner'] as Map<String, dynamic>) : null,
       date: map['date'],
-      likeCount: map['like_count'],
+      likeCount: map['like_count'] != null ?? map['like_count'],
       author: map['author']
     );
   }
