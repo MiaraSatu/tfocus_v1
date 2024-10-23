@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/profileContentChangeNotifier.dart';
 import 'package:tfocus_v_common_2/services/api_service.dart';
+import 'package:tfocus_v_common_2/widgets/publicationWidget.dart';
+import 'package:tfocus_v_common_2/widgets/publicationFormWidget.dart';
 
 class MainListItemWidget extends StatefulWidget {
   const MainListItemWidget({super.key});
@@ -82,22 +84,8 @@ class MainListWidget extends StatelessWidget {
 
 class MainListContentWidget extends StatelessWidget {
   static Map<String, Widget> contents = {
-    "All": FutureBuilder<List<Publication>>(
-      future: ApiService.fetchPublications(),
-      builder: (context, AsyncSnapshot<List<Publication>> snapshot) {
-        if(snapshot.hasData) {
-          List<Publication> publications = snapshot.data!;
-          return Column(
-            children: publications.map((pub) => PublicationWidget(pub)).toList(),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    ) ,
-    "Publications": Text("only publication display here"),
+    "All": UserPublicationsWidget(),
+    "Publications": PublicationFormWidget(),
     "Articles": Text("Yes you need to see only shared articles"),
     "Share": Text("only share: pub or articles")
   };
@@ -112,21 +100,41 @@ class MainListContentWidget extends StatelessWidget {
   }
 }
 
+class UserPublicationsWidget extends StatefulWidget {
+  UserPublicationsWidget({super.key});
+  @override
+  State<UserPublicationsWidget> createState() => _UserPublicationsWidgetState();
+}
 
-class PublicationWidget extends StatelessWidget {
-  Publication publication;
+class _UserPublicationsWidgetState extends State<UserPublicationsWidget> {
+  List<Publication> publicationsOfUser = [];
 
-  PublicationWidget(this.publication, {super.key});
+  void fetchUserPublications() async {
+    List<Publication> fetched = await ApiService.fetchPublicationsByUser(1);
+    setState(() {
+      publicationsOfUser = fetched;
+    });
+  }
+
+  @override
+  void initState() {
+    fetchUserPublications();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return PublicationListWidget(publicationsOfUser);
+  }
+}
+
+class PublicationListWidget extends StatelessWidget {
+  List<Publication> publications;
+  PublicationListWidget(this.publications, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(publication.title),
-        ],
-      ),
+    return Column(
+      children: publications.map((pub) =>PublicationWidget(pub)).toList()
     );
   }
 }

@@ -6,53 +6,58 @@
   file,
   content
 * */
-import 'dart:ffi';
-
 import 'package:tfocus_v_common_2/models/user.dart';
 
 class Publication {
   int id;
-  String title;
+  String? title;
   String? content;
   String? link;
-  String type;
-  String file;
-  User owner;
+  String? file;
+  User? owner;
   Map<String, dynamic>? extra;
   String? date;
+  int? likeCount = 0;
+  String? author;
 
   Publication({
     required this.id,
-    required this.title,
+    this.title,
     this.content,
     this.link,
-    required this.type,
-    required this.file,
+    this.file,
     this.extra,
-    required this.owner
+    this.owner,
+    this.date,
+    this.likeCount,
+    this.author
   });
 
   factory Publication.fromMap(Map<String, dynamic> map) {
     return Publication(
-      id: map['id'],
+      id: map['pk'],
       title: map['title'],
       content: map['content'],
       link: map['link'],
-      type: map['type'],
       file: map['file'],
       extra: map['extra'],
-      owner: User.fromMap(map['owner'] as Map<String, dynamic>),
+      owner: map['owner'] == "" ? User.fromMap(map['owner'] as Map<String, dynamic>) : null,
+      date: map['date'],
+      likeCount: map['like_count'],
+      author: map['author']
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'pk': id,
       'content': content,
       'link': link,
-      'type': type,
       'file': file,
       'extra': extra,
+      'date': date,
+      'likeCount': likeCount,
+      'author': author
     };
   }
 

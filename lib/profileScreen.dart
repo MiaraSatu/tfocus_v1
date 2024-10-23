@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/profilMainList.dart';
 import 'package:tfocus_v_common_2/profileContentChangeNotifier.dart';
+import 'package:tfocus_v_common_2/services/api_service.dart';
 
-class ProfileScreen extends StatelessWidget {
-  static double LAR = 8; // little_avatars_radius
+class ProfileScreen extends StatefulWidget {
+  static double LAR = 8;
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late Publication publication;
+
+  @override
+  void setState(VoidCallback fn) async {
+    publication = await ApiService.fetchPublicationDetails(54);
+    super.setState(fn);
+  }
+
+  void fetchPub(BuildContext context) async {
+    context.push("/publication", extra: publication);
+  }
+
+ // little_avatars_radius
   @override
   Widget build(BuildContext context) {
     Widget profilPicWidget = Container(
@@ -100,20 +121,20 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(LAR),
+                            borderRadius: BorderRadius.circular(ProfileScreen.LAR),
                             border: Border.all(
                               color: Colors.white70,
                             )
                         ),
                         child: CircleAvatar(
-                          radius: LAR,
+                          radius: ProfileScreen.LAR,
                           backgroundImage: AssetImage(
                               'images/avatars/old_man.jpg'
                           ),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: LAR),
+                        margin: EdgeInsets.only(left: ProfileScreen.LAR),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           border: Border.all(
@@ -121,14 +142,14 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         child: CircleAvatar(
-                          radius: LAR,
+                          radius: ProfileScreen.LAR,
                           backgroundImage: AssetImage(
                               'images/avatars/photograph.jpg'
                           ),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 2*LAR),
+                        margin: EdgeInsets.only(left: 2*ProfileScreen.LAR),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           border: Border.all(
@@ -136,7 +157,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         child: CircleAvatar(
-                          radius: LAR,
+                          radius: ProfileScreen.LAR,
                           backgroundImage: AssetImage(
                               'images/avatars/square_woman_1.jpg'
                           ),
@@ -179,13 +200,13 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(LAR),
+                            borderRadius: BorderRadius.circular(ProfileScreen.LAR),
                             border: Border.all(
                               color: Colors.white70,
                             )
                         ),
                         child: CircleAvatar(
-                          radius: LAR,
+                          radius: ProfileScreen.LAR,
                           backgroundImage: AssetImage(
                               'images/avatars/square_woman_1.jpg'
                           ),
@@ -200,14 +221,14 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         child: CircleAvatar(
-                          radius: LAR,
+                          radius: ProfileScreen.LAR,
                           backgroundImage: AssetImage(
                               'images/avatars/smiled_woman.jpg'
                           ),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 2*LAR),
+                        margin: EdgeInsets.only(left: 2*ProfileScreen.LAR),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           border: Border.all(
@@ -215,7 +236,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         child: CircleAvatar(
-                          radius: LAR,
+                          radius: ProfileScreen.LAR,
                           backgroundImage: AssetImage(
                               'images/avatars/photograph.jpg'
                           ),
@@ -258,13 +279,16 @@ class ProfileScreen extends StatelessWidget {
         children: [
           // follow button
           CElevatedButton(
-            text: "Follow",
+            icon: Icon(Icons.add),
+            text: "Publication",
             textSize: 16,
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
             radius: BorderRadius.circular(15),
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            onPressed: () {},
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            onPressed: () => {
+              context.push("/createPublication")
+            },
           ),
           // message button
           CElevatedButton(
@@ -291,6 +315,7 @@ class ProfileScreen extends StatelessWidget {
         body: Stack(
           children: [
             // background
+            /*
             Positioned.fill(
               child: Container(
                 width: double.infinity,
@@ -303,6 +328,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
+            * */
             ListView(
               children: [
                 Padding(
@@ -336,9 +362,10 @@ class CElevatedButton extends StatelessWidget { // CustomElevetedButton
   Color foregroundColor;
   EdgeInsets padding;
   Function() onPressed;
+  Icon? icon;
 
   CElevatedButton({super.key, required this.text, required this.textSize, required this.radius, required this.backgroundColor,
-    required this.foregroundColor, required this.padding, required this.onPressed});
+    required this.foregroundColor, required this.padding, required this.onPressed, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -352,12 +379,23 @@ class CElevatedButton extends StatelessWidget { // CustomElevetedButton
           borderRadius: radius,
         )
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: textSize
-        ),
-      ),
+      child: (icon == null)
+        ? Text(
+          text,
+          style: TextStyle(
+            fontSize: textSize
+          ))
+        : Row(
+          children: [
+            icon!,
+            Text(
+              text,
+              style: TextStyle(
+                  fontSize: textSize
+              ))
+          ],
+        )
+        ,
     );
   }
 }

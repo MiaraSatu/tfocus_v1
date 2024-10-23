@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tfocus_v_common_2/AddPublicationScreen.dart';
 import 'package:tfocus_v_common_2/Views/explore_screen.dart';
 import 'package:tfocus_v_common_2/Views/feed_screen.dart';
 import 'package:tfocus_v_common_2/Views/message_screen.dart';
 import 'package:tfocus_v_common_2/Views/profil_screen.dart';
 import 'package:tfocus_v_common_2/discussionScreen.dart';
 import 'package:tfocus_v_common_2/discussionsScreen.dart';
+import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/profileScreen.dart';
+import 'package:tfocus_v_common_2/publicationScreen.dart';
 import 'main.dart';
 
 GoRouter routes = GoRouter(routes: [
@@ -32,6 +35,15 @@ GoRouter routes = GoRouter(routes: [
         GoRoute(
           path: 'discussion',
           builder: (context, state) => DiscussionScreen(user: state.extra as Map<String, String>)
+        ),
+        GoRoute(
+          path: 'publication',
+          builder: (context, state) => PublicationScreen(state.extra as Publication)
+          // builder: (context, state) => AddPublicationScreen(state.extra as Publication)
+        ),
+        GoRoute(
+          path: 'createPublication',
+          builder: (context, state) => AddPublicationScreen()
         ),
         //GoRoute(
         //     path: 'list_by/:url',

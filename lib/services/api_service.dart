@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/models/comment.dart';
 import 'package:http/http.dart' as http;
-import 'package:tfocus_v_common_2/models/reaction.dart';
+import 'package:tfocus_v_common_2/models/like.dart';
 import 'package:tfocus_v_common_2/models/message.dart';
 import 'package:tfocus_v_common_2/models/user.dart';
 
@@ -19,25 +20,19 @@ class ApiService {
   ];
 
   static List<Publication> publications = [
-    Publication(id: 1, title: "Pub 1", type: "publication", owner: users[0], content: "Je suis ravi de rejoindre vos communauté", file: "images/externalisation-de-la-paie.jpg"),
-    Publication(id: 2, title: "Pub 2", type: "publication", owner:users[0] , content: "Lorem ipsum delor sit amet", file: "images/logo-ispm.png"),
-    Publication(id: 3, title: "Pub 3", type: "publication", owner: users[1], content: "Amigo dalameta abesitera", file: "images/ion.jpg"),
-    Publication(id: 4, title: "Pub 4", type: "publication", owner:users[3] , content: "ipsum alimona dika ninalke", file: "images/ext2.jpg"),
-  ];
+    ];
 
   /*
   * Liste des routes utiles:
   *
   * */
-  static String BASE_URL = 'http://localhost:8000/';
+  static String BASE_URL = 'http://192.168.233.83:8000/';
   static String API_URL = BASE_URL+'/api';
 
   // SPECIAL FOR PUBLICATION
   static Future<List<Publication>> fetchPublications() async {
-
-    return publications;
     final response = await http.get(
-      Uri.parse(API_URL+"/publications") // localhost:8000/api/publications
+      Uri.parse(API_URL+"/publications/") // localhost:8000/api/publications
     );
 
     if(200 <= response.statusCode && response.statusCode < 300) {
@@ -47,57 +42,86 @@ class ApiService {
       ));
       return pubs;
     } else {
-      return publications;
+      throw new Exception("Failed to fetch publications");
     }
   }
 
   static Future<Publication> fetchPublicationDetails(int pubId) async {
     final response = await http.get(
-      Uri.parse("$API_URL/publication/$pubId")
+      Uri.parse("$API_URL/publication/$pubId/")
     );
-
     if(200 <= response.statusCode && response.statusCode < 300) {
       final responseData = jsonDecode(response.body);
       Publication pub = Publication.fromMap(responseData as Map<String, dynamic>);
       return pub;
     } else {
+      print("errrrrrroooooooorrr:"+response.body);
+      print("status"+response.statusCode.toString());
       throw new Exception("Problem occured! publication not loaded");
     }
   }
 
-  static Future<Publication> createPublication(int ownerId, Publication publication) async {
+  static Future<bool> createPublication(int ownerId, Map<String, dynamic> publication) async {
     final response = await http.post(
-      Uri.parse("$API_URL/publication"), // api/publication POST
-      body: publication.toMap()
+      Uri.parse("$API_URL/publication/"), // api/publication POST
+      body: publication
+    );
+    int status = response.statusCode;
+    if(200 <= status && status < 300) {
+
+      print(response.body);
+      /*
+      final responseData = jsonDecode(response.body);
+      Publication pub = Publication.fromMap(responseData as Map<String, dynamic>);
+      return pub;
+      */
+      return true;
+    } else {
+      print("erreur du serveur:"+response.body);
+      // throw new Exception("Failed to publy post");
+      return false;
+    }
+  }
+
+  static Future<List<Publication>> fetchPublicationsByUser(int userId) async {
+    final response = await http.get(
+      Uri.parse("$API_URL/user/$userId/publications/"),
     );
     int status = response.statusCode;
     if(200 <= status && status < 300) {
       final responseData = jsonDecode(response.body);
-      Publication pub = Publication.fromMap(responseData as Map<String, dynamic>);
-      return pub;
+      print("BODY: "+response.body);
+      List<Publication> pubs = List<Publication>.from(responseData.map(
+          (pub) => Publication.fromMap(pub as Map<String, dynamic>)
+      ));
+      return pubs;
     } else {
-      throw new Exception("Failed to publy post");
+      throw Exception("Failed to fetch users's publications");
     }
   }
 
   // SPECIAL FOR COMMENTS
-  static Future<Comment?> commentPublication(int pubId, String comment) async {
+  static Future<bool> commentPublication(int pubId, String comment) async {
     final response = await http.post(
-      Uri.parse("$API_URL/publication/$pubId/comment"),
-      body: jsonEncode({'content': comment})
+      Uri.parse("$API_URL/publication/$pubId/comment/"),
+      body: jsonEncode({'content': comment}),
+      headers: {"Content-Type": "application/json"}
     );
 
     if(200 <= response.statusCode && response.statusCode < 300) {
-      final jsonResponse = jsonDecode(response.body);
-      Comment com = Comment.fromMap(jsonResponse as Map<String, dynamic>);
+      /*
+        final jsonResponse = jsonDecode(response.body);
+        Comment com = Comment.fromMap(jsonResponse as Map<String, dynamic>);
+       */
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 
   static Future<List<Comment>> fetchComments(int pubId) async {
     final response = await http.post(
-      Uri.parse("$API_URL/publication/$pubId/comments")
+      Uri.parse("$API_URL/publication/$pubId/comments/")
     );
     int status = response.statusCode;
     if(200 <= status && status < 300) {
@@ -111,31 +135,34 @@ class ApiService {
     }
   }
 
-  // SPECIAL FOR REACTION
-  static Future<Reaction> reactPublication(int pubId, String reaction) async {
+  // SPECIAL FOR LIKE
+  static Future<bool> likePublication(int pubId) async {
     final response = await http.post(
-      Uri.parse("$API_URL/publication/$pubId"),
-      body: jsonEncode({'reaction': reaction, 'parentType': "publication"})
+      Uri.parse("$API_URL/publication/$pubId/like/"),
+      body: jsonEncode({'publication':pubId})
     );
-
     if(200 <= response.statusCode && response.statusCode < 300) {
+      /*
       final responseData = jsonDecode(response.body);
-      Reaction react = Reaction.fromMap(responseData as Map<String, dynamic>);
+      Like react = Like.fromMap(responseData as Map<String, dynamic>);
       return react;
+       */
+      return true;
     } else {
-      throw new Exception("Failed to react comment");
+      return false;
+      // throw new Exception("Failed to react comment");
     }
   }
 
-  static Future<List<Reaction>> fetchReactions(int pubId) async {
+  static Future<List<Like>> fetchReactions(int pubId) async {
     final response = await http.get(
-      Uri.parse("$API_URL/publication/$pubId")
+      Uri.parse("$API_URL/publication/$pubId/")
     );
     int status = response.statusCode;
     if(200 <= status && status < 300) {
       final responseData = jsonDecode(response.body);
-      List<Reaction> reactions = List<Reaction>.from(responseData.map(
-        (react) => Reaction.fromMap(react as Map<String, dynamic>)
+      List<Like> reactions = List<Like>.from(responseData.map(
+        (react) => Like.fromMap(react as Map<String, dynamic>)
       ));
       return reactions;
     } else {
@@ -143,9 +170,9 @@ class ApiService {
     }
   }
 
-  static Future<Reaction> reactComment(int commentId, String reaction) async {
+  static Future<Like> reactComment(int commentId, String reaction) async {
     final response = await http.post(
-      Uri.parse("$API_URL/comment/$commentId/react"),
+      Uri.parse("$API_URL/comment/$commentId/react/"),
       body: {
         'reaction': reaction
       }
@@ -153,7 +180,7 @@ class ApiService {
     int status = response.statusCode;
     if(200 <= status && status < 300) {
       final responseData = jsonDecode(response.body);
-      Reaction react = Reaction.fromMap(responseData as Map<String, dynamic>);
+      Like react = Like.fromMap(responseData as Map<String, dynamic>);
       return react;
     } else {
       throw new Exception("Failed to react comment");
@@ -163,7 +190,7 @@ class ApiService {
   // SPECIAL FOR DISCUSSION
   static Future<List<Message>> fetchMessages(int userId) async {
     final response = await http.get(
-      Uri.parse("$API_URL/discussions/user/$userId"),
+      Uri.parse("$API_URL/discussions/user/$userId/"),
     );
 
     if(200 <= response.statusCode && response.statusCode < 300) {
@@ -179,7 +206,7 @@ class ApiService {
 
   static Future<List<Message>> fetchMessageDetails(int userId, int otherUserId) async {
     final response = await http.get(
-      Uri.parse("$API_URL/discussions/user/$userId/other/$otherUserId")
+      Uri.parse("$API_URL/discussions/user/$userId/other/$otherUserId/")
     );
 
     int status = response.statusCode;
@@ -197,7 +224,7 @@ class ApiService {
 
   static Future<Message> sendMessage(int senderId, int destinationId, String message) async {
     final response = await http.post(
-      Uri.parse("$API_URL/user/$senderId/destination/$destinationId")
+      Uri.parse("$API_URL/user/$senderId/destination/$destinationId/")
     );
     int status = response.statusCode;
     if(200 <= status && status < 300) {
@@ -212,7 +239,7 @@ class ApiService {
   // SPECIAL FOR USER
   static Future<User> fetchUserDetails(int userId) async {
     final response = await http.get(
-      Uri.parse("$API_URL/user/$userId")
+      Uri.parse("$API_URL/user/$userId/")
     );
     int status = response.statusCode;
     if(200 <= status && status < 300) {
