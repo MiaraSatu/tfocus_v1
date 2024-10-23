@@ -6,16 +6,20 @@ class Comment {
   String content;
   Publication publication;
   User owner;
-  String createdAt;
-  String updatedAt;
+  String date;
+  int likeCount;
+  /*String createdAt;
+  String updatedAt;*/
 
   Comment({
     required this.id,
     required this.content,
     required this.publication,
     required this.owner,
-    required this.createdAt,
-    required this.updatedAt
+    this.date = "25-10-24",
+    this.likeCount = 12,
+    /*required this.createdAt,
+    required this.updatedAt*/
   });
 
   factory Comment.fromMap(Map<String, dynamic> map) {
@@ -24,8 +28,10 @@ class Comment {
       content: map['content'],
       publication: Publication.fromMap(map['publication'] as Map<String, dynamic>),
       owner: User.fromMap(map['owner'] as Map<String, dynamic>),
-      createdAt: map['createdAt'],
-      updatedAt: map['updatedAt']
+      date: map['date'] != null ?? map['date'],
+      likeCount: map['likeCount'] != null ?? map['likeCount']
+      /*createdAt: map['createdAt'],
+      updatedAt: map['updatedAt']*/
     );
   }
 
@@ -35,8 +41,9 @@ class Comment {
       'content': content,
       'publication': publication.toMap(),
       'owner': owner.toMap(),
-      "createdAt": createdAt,
-      "updatedAt": updatedAt
+      'date': date
+      /*"createdAt": createdAt,
+      "updatedAt": updatedAt*/
     };
   }
 }

@@ -1,21 +1,23 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tfocus_v_common_2/models/comment.dart';
+import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/services/api_service.dart';
 import 'package:tfocus_v_common_2/widgets/commentFormWidget.dart';
+import 'package:tfocus_v_common_2/widgets/commentWidget.dart';
+import 'package:tfocus_v_common_2/widgets/publicationWidget.dart';
 
-import '../models/publication.dart';
 
-class PublicationWidget extends StatefulWidget {
+class PublicationDetailsWidget extends StatefulWidget {
   final Publication publication;
 
-  PublicationWidget(this.publication, {super.key});
+  PublicationDetailsWidget(this.publication, {super.key});
 
   @override
-  State<PublicationWidget> createState() => _PublicationWidgetState();
+  State<PublicationDetailsWidget> createState() => _PublicationDetailsWidgetState();
 }
 
-class _PublicationWidgetState extends State<PublicationWidget> {
+class _PublicationDetailsWidgetState extends State<PublicationDetailsWidget> {
   int likeCount = 0;
   bool displayForm = false;
 
@@ -55,30 +57,30 @@ class _PublicationWidgetState extends State<PublicationWidget> {
         children: [
           // publication owner
           (widget.publication.owner != null)
-            ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundImage: AssetImage(widget.publication.owner!.profilePicUrl != null ? widget.publication.owner!.profilePicUrl! : "images/avatars/old_man.jpg"),
-                    ),
-                    Text(widget.publication.owner!.firstName, style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),),
-                  ],
-                ),
-                // DATE
-                (widget.publication.date != null)
-                ? Text(
-                  widget.publication.date!,
-                )
-                :Container(),
-              ],
-            )
-            : Container(),
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 15,
+                    backgroundImage: AssetImage(widget.publication.owner!.profilePicUrl != null ? widget.publication.owner!.profilePicUrl! : "images/avatars/old_man.jpg"),
+                  ),
+                  Text(widget.publication.owner!.firstName, style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),),
+                ],
+              ),
+              // DATE
+              (widget.publication.date != null)
+                  ? Text(
+                widget.publication.date!,
+              )
+                  :Container(),
+            ],
+          )
+              : Container(),
           GestureDetector(
             onTap: () {
               context.push("/publication", extra: widget.publication);
@@ -124,6 +126,24 @@ class _PublicationWidgetState extends State<PublicationWidget> {
           ),
           // zone de text de commentaire
           displayForm ? CommentFormWidget(widget.publication) : Container(),
+          // lites des commentaires
+          FutureBuilder(
+            future: ApiService.fetchComments(widget.publication.id),
+            builder: (BuildContext context, AsyncSnapshot<List<Comment>> snapshot) {
+              if(snapshot.hasData) {
+                List<Comment> comments = snapshot.data!;
+                return Column(
+                  children: comments.map(
+                      (comment) => CommentWidget(comment)
+                  ).toList(),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }
+          )
         ],
       ),
     );

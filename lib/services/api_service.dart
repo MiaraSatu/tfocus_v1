@@ -28,6 +28,13 @@ class ApiService {
     Publication(id: 4, link: "https://mirabella.hgc/green-day-and-pink-day", file: "https://mirabella.hgc/event/gdpd.png", date: "28-10-24")
   ];
 
+  static List<Comment> comments = [
+    Comment(id: 1, content: "Je suis ravi de pouvoir rejoindre votre communauté", publication: publications[1], owner: users[2]),
+    Comment(id: 2, content: "Merci, vous êtes tous des bonnes personnes", publication: publications[1], owner: users[3]),
+    Comment(id: 3, content: "Je suis ravi de pouvoir rejoindre votre communauté", publication: publications[1], owner: users[2]),
+    Comment(id: 4, content: "Merci, vous êtes tous des bonnes personnes", publication: publications[1], owner: users[3]),
+  ];
+
   /*
   * Liste des routes utiles:
   *
@@ -129,6 +136,7 @@ class ApiService {
   }
 
   static Future<List<Comment>> fetchComments(int pubId) async {
+    return comments;
     final response = await http.post(
       Uri.parse("$API_URL/publication/$pubId/comments/")
     );

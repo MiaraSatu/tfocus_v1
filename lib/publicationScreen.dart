@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfocus_v_common_2/models/publication.dart';
-import 'package:tfocus_v_common_2/widgets/publicationWidget.dart';
+import 'package:tfocus_v_common_2/widgets/publicationDetailsWidget.dart';
 
 class PublicationScreen extends StatefulWidget {
   Publication publication;
@@ -17,7 +17,11 @@ class _PublicationScreenState extends State<PublicationScreen> {
       appBar: AppBar(
         title: Text("Détail de la publication"),
       ),
-      body: PublicationWidget(widget.publication),
+      body: ListView(
+        children: [
+          PublicationDetailsWidget(widget.publication)
+        ]
+      ),
     );
   }
 }
