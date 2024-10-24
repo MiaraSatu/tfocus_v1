@@ -24,6 +24,13 @@ class _PublicationState extends State<PublicationFormWidget> {
     }
   }
 
+  void reinitializeForm() {
+    setState(() {
+      _titleCtr.text = "";
+      _contentCtr.text = "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     /*
@@ -35,6 +42,7 @@ class _PublicationState extends State<PublicationFormWidget> {
     * */
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
           controller: _titleCtr,
@@ -57,9 +65,31 @@ class _PublicationState extends State<PublicationFormWidget> {
               )
           ),
         ),
-        ElevatedButton(
-          onPressed: () => submitPublication(context),
-          child: Text("Publier")
+        /*Container(
+          decoration: BoxDecoration(
+            color: Colors.blue
+          ),
+          child: Text(
+            "Publier",
+            style: TextStyle(
+              color: Colors.white
+            ),
+          ),
+          width: double.infinity,
+        ),*/
+        SizedBox(height: 10,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+                onPressed: () => submitPublication(context),
+                child: Text("Publier"),
+            ),
+            ElevatedButton(
+                onPressed: () => reinitializeForm(),
+                child: Text("Réinitialiser")
+            )
+          ],
         )
       ],
     );

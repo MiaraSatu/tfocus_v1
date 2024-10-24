@@ -39,30 +39,38 @@ class ApiService {
   * Liste des routes utiles:
   *
   * */
-  static String BASE_URL = 'http://192.168.233.83:8000/';
-  static String API_URL = BASE_URL+'/api';
+  static String BASE_URL = 'http://192.168.249.83:8000/';
+  static String API_URL = BASE_URL+'api';
+
+  static Map<String, String> HEADERS = {
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  };
 
   // SPECIAL FOR PUBLICATION
   static Future<List<Publication>> fetchPublications() async {
-    return publications;
+    // return publications;
     final response = await http.get(
-      Uri.parse(API_URL+"/publications/") // localhost:8000/api/publications
+      Uri.parse(API_URL+"/publications/"),
+      headers: HEADERS// localhost:8000/api/publications
     );
 
     if(200 <= response.statusCode && response.statusCode < 300) {
-      return publications;
+      // return publications;
       final responseData = jsonDecode(response.body);
       List<Publication> pubs = List<Publication>.from(responseData.map(
         (pubMap) => Publication.fromMap(pubMap as Map<String, dynamic>)
       ));
       return pubs;
     } else {
+      print(response.body);
       throw new Exception("Failed to fetch publications");
     }
   }
 
   static Future<Publication> fetchPublicationDetails(int pubId) async {
-    return publications[2];
+    // return publications[2];
     final response = await http.get(
       Uri.parse("$API_URL/publication/$pubId/")
     );
@@ -99,11 +107,45 @@ class ApiService {
     }
   }
 
+  static Future<List<Publication>> fetchPublicationsWithFilter(String filter, int userId) async {
+    final response = await http.get(
+      Uri.parse("$API_URL/user/$userId/publications/$filter")
+    );
+    int status = response.statusCode;
+    if(200 <= status && status < 300) {
+      final responseData = jsonDecode(response.body);
+      List<Publication> publications = List<Publication>.from(responseData.map(
+          (pub) => Publication.fromMap(pub as Map<String, dynamic>)
+      ));
+      return publications;
+    } else {
+      throw Exception("Failed to ");
+    }
+  }
+
+  static Future<List<Publication>> searchPublications(String q) async {
+    final response = await http.get(
+      Uri.parse("$API_URL/search/$q")
+    );
+    int status = response.statusCode;
+    if(200 <= status && status < 300) {
+      final responseData = jsonDecode(response.body);
+      List<Publication> result = List<Publication>.from(responseData.map(
+          (res) => Publication.fromMap(res as Map<String, dynamic>)
+      ));
+      return result;
+    } else {
+      throw Exception("Failed to fetch: " + response.body);
+    }
+  }
+
   static Future<List<Publication>> fetchPublicationsByUser(int userId) async {
+    // return publications;
     final response = await http.get(
       Uri.parse("$API_URL/user/$userId/publications/"),
     );
     int status = response.statusCode;
+
     if(200 <= status && status < 300) {
       final responseData = jsonDecode(response.body);
       print("BODY: "+response.body);
@@ -112,7 +154,7 @@ class ApiService {
       ));
       return pubs;
     } else {
-      throw Exception("Failed to fetch users's publications");
+      throw Exception("ERRORRRRRR: Failed to fetch users's publications");
     }
   }
 
@@ -136,7 +178,7 @@ class ApiService {
   }
 
   static Future<List<Comment>> fetchComments(int pubId) async {
-    return comments;
+    // return comments;
     final response = await http.post(
       Uri.parse("$API_URL/publication/$pubId/comments/")
     );

@@ -171,6 +171,7 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
       ),
       onTap: () {
+        print("To browser!");
         openBrowser(article.link!);
       },
     );

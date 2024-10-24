@@ -30,7 +30,7 @@ class _MainListItemWidgetState extends State<MainListItemWidget> {
     ProfileContentChangeNotifier notifier = Provider.of<ProfileContentChangeNotifier>(context);
     currentItem = notifier.currentItem;
     return Container(
-      margin: EdgeInsets.only(top: 16),
+      margin: EdgeInsets.symmetric(vertical: 16, horizontal: 30),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: items.map((item) =>
@@ -40,7 +40,8 @@ class _MainListItemWidgetState extends State<MainListItemWidget> {
                 changeCurrentItem(item, notifier);
               },
               style: TextButton.styleFrom(
-                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
+                  backgroundColor: Colors.grey.shade300,
                   padding: EdgeInsets.symmetric(horizontal: 4)
               ),
               child: Text(
@@ -62,7 +63,8 @@ class _MainListItemWidgetState extends State<MainListItemWidget> {
               item,
               style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.w400
               ),
             ),
@@ -85,9 +87,9 @@ class MainListWidget extends StatelessWidget {
 class MainListContentWidget extends StatelessWidget {
   static Map<String, Widget> contents = {
     "All": UserPublicationsWidget(),
-    "Publications": PublicationFormWidget(),
-    "Articles": Text("Yes you need to see only shared articles"),
-    "Share": Text("only share: pub or articles")
+    "Publications": UserPublicationsWidget(),
+    "Articles": UserPublicationsWidget(),
+    "Share": UserPublicationsWidget()
   };
 
   String item;
@@ -96,11 +98,15 @@ class MainListContentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return contents[item]!;
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: contents[item]!
+    );
   }
 }
 
 class UserPublicationsWidget extends StatefulWidget {
+  String filter = "all";
   UserPublicationsWidget({super.key});
   @override
   State<UserPublicationsWidget> createState() => _UserPublicationsWidgetState();

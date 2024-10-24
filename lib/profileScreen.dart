@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Text(
         "Erga Traore",
         style: TextStyle(
-            color: Colors.white,
+            // color: Colors.white,
             fontSize: 22
         ),
       ),
@@ -72,13 +72,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget mailWidget = Text(
       "ergtrr@example.com",
       style: TextStyle(
-          color: Colors.white54,
+          // color: Colors.white54,
           fontSize: 16,
           fontWeight: FontWeight.w400
       ),
     );
     Widget followStatusWidget = Container(
       margin: EdgeInsets.only(top: 32),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -88,11 +89,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Row(
                 children: [
-                  Icon(Icons.link, color: Colors.white,),
+                  Icon(Icons.link,
+                    // color: Colors.white,
+                  ),
                   Text(
                     "+90",
                     style: TextStyle(
-                        color: Colors.white,
+                        // color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w700
                     ),
@@ -104,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                       "Articles",
                       style: TextStyle(
-                        color: Colors.white70,
+                        // color: Colors.white70,
                         fontSize: 16,
                       )
                   )
@@ -170,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Text(
                       "1.4K",
                       style: TextStyle(
-                          color: Colors.white,
+                          // color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w700
                       ),
@@ -183,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                     "Follower(s)",
                     style: TextStyle(
-                      color: Colors.white70,
+                      // color: Colors.white70,
                       fontSize: 16,
                     ),
                   )
@@ -249,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Text(
                       "224",
                       style: TextStyle(
-                          color: Colors.white,
+                          // color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w700
                       ),
@@ -262,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                     "Follow",
                     style: TextStyle(
-                      color: Colors.white70,
+                      // color: Colors.white70,
                       fontSize: 16,
                     ),
                   )
@@ -274,6 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
     Widget actionsWidget = Container(
       margin: EdgeInsets.only(top: 16),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -299,10 +303,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               foregroundColor: Colors.black,
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               onPressed: () {
-                Navigator.pushNamed(context, '/discussion', arguments: {
+                context.push("/discussion", extra: {
                   "name": "Erga Traore",
                   "image": "images/avatars/smiled_woman.jpg"
                 });
+                /*
+                Navigator.pushNamed(context, '/discussion', arguments: {
+                  "name": "Erga Traore",
+                  "image": "images/avatars/smiled_woman.jpg"
+                });*/
               }
           ),
         ],
@@ -331,8 +340,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             * */
             ListView(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                Container(
+                  // padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     children: [
                       profilPicWidget,

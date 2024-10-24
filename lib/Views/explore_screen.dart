@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tfocus_v_common_2/Views/list_article_by_category.dart';
 import 'package:tfocus_v_common_2/models/article_model.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -33,6 +34,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   _search(String q) {
+    // context.push("/result", extra: q);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -94,12 +96,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.filter_list, color: Colors.white),
-                      onPressed: () {},
+                      onPressed: () {
+                        // context.push("/result", extra: q.text);
+                      },
                     ),
                   ],
                 ),
               ),
             ),
+
+            /*
             const ListTile(
               title: Text(
                 "Populaire",
@@ -132,6 +138,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 },
               ),
             ),
+            * */
             const ListTile(
               title: Text("Explorer",
                   style: TextStyle(fontWeight: FontWeight.bold)),
@@ -178,6 +185,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ),
           )),
       onTap: () {
+        // context.push("/result", extra: explores[index]);
         Navigator.push(
           context,
           MaterialPageRoute(

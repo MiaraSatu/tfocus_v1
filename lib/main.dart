@@ -10,7 +10,7 @@ import 'helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DBHelper().initializeDB();
+  // DBHelper().initializeDB();
 
   runApp(const MyApp());
 }

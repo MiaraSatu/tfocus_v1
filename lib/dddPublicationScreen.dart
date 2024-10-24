@@ -11,7 +11,10 @@ class AddPublicationScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Créer une nouvelle publication"),
       ),
-      body: PublicationFormWidget(),
+      body: Container(
+        padding: EdgeInsets.all(30),
+        child: PublicationFormWidget(),
+      ),
     );
   }
 }

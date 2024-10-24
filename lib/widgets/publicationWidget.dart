@@ -1,7 +1,11 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tfocus_v_common_2/models/article_model.dart';
 import 'package:tfocus_v_common_2/services/api_service.dart';
+import 'package:tfocus_v_common_2/services/stringFormater.dart';
 import 'package:tfocus_v_common_2/widgets/commentFormWidget.dart';
 
 import '../models/publication.dart';
@@ -16,12 +20,22 @@ class PublicationWidget extends StatefulWidget {
 }
 
 class _PublicationWidgetState extends State<PublicationWidget> {
+  // var random = Random();
   int likeCount = 0;
   bool displayForm = false;
+  bool liked = false;
+  String imagePath = images[Random().nextInt(4)];
+
+  static List<String> images = [
+    "images/ext2.jpg",
+    "images/externalisation-de-la-paie.jpg",
+    "images/iob.jpg",
+    "images/logo-ispm.png",
+  ];
 
   @override
   void initState() {
-    likeCount = widget.publication.likeCount;
+    likeCount += widget.publication.likeCount;
     super.initState();
   }
 
@@ -32,12 +46,22 @@ class _PublicationWidgetState extends State<PublicationWidget> {
   }
 
   void likePublication(BuildContext context) async {
-    bool likeSend = await ApiService.likePublication(52);
+    bool likeSend = await ApiService.likePublication(widget.publication.id);
     if(likeSend) {
-      setState(() {
-        likeCount = likeCount + 1;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Publication liked")));
+      if(liked) {
+        setState(() {
+          liked = false;
+          likeCount = likeCount - 1;
+        });
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("disliked success")));
+      }
+      else {
+        setState(() {
+          liked = true;
+          likeCount = likeCount + 1;
+        });
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Publication liked")));
+      }
     }
   }
 
@@ -62,7 +86,7 @@ class _PublicationWidgetState extends State<PublicationWidget> {
                   children: [
                     CircleAvatar(
                       radius: 15,
-                      backgroundImage: AssetImage(widget.publication.owner!.profilePicUrl != null ? widget.publication.owner!.profilePicUrl! : "images/avatars/old_man.jpg"),
+                      backgroundImage: NetworkImage(widget.publication.owner!.profilePicUrl != null ? widget.publication.owner!.profilePicUrl! : "images/avatars/old_man.jpg"),
                     ),
                     Text(widget.publication.owner!.firstName, style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -80,8 +104,12 @@ class _PublicationWidgetState extends State<PublicationWidget> {
             )
             : Container(),
           GestureDetector(
-            onTap: () {
-              context.push("/publication", extra: widget.publication);
+            onTap: () async {
+              if(widget.publication.link != null) {
+                openBrowser(widget.publication.link!);
+              } else {
+                context.push("/publication", extra: widget.publication);
+              }
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +120,8 @@ class _PublicationWidgetState extends State<PublicationWidget> {
                     fontWeight: FontWeight.w700
                 ),) : Container(),
                 // publication image
-                (widget.publication.file != null ) ? Image.asset(widget.publication.file!, fit: BoxFit.cover,) : Container(),
+                // (widget.publication.file != null ) ? Image.network(StringFormater.removeSlash(widget.publication.file!), fit: BoxFit.cover,) : Container(),
+                Image.asset(imagePath),
                 // publication text content
                 (widget.publication.content != null) ? Text(widget.publication.content!) : Container(),
               ],
@@ -106,7 +135,7 @@ class _PublicationWidgetState extends State<PublicationWidget> {
                 children: [
                   IconButton(
                     onPressed: () => likePublication(context),
-                    icon: Icon(Icons.thumb_up_alt_outlined),
+                    icon: Icon(liked? Icons.favorite : Icons.favorite_border, color: Colors.blueAccent,),
                   ),
                   likeCount != 0 ? Text(likeCount.toString()) : Container(),
                 ],

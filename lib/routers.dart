@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tfocus_v_common_2/AddPublicationScreen.dart';
+import 'package:tfocus_v_common_2/dddPublicationScreen.dart';
 import 'package:tfocus_v_common_2/Views/explore_screen.dart';
 import 'package:tfocus_v_common_2/Views/feed_screen.dart';
 import 'package:tfocus_v_common_2/Views/message_screen.dart';
@@ -10,6 +10,7 @@ import 'package:tfocus_v_common_2/discussionsScreen.dart';
 import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/profileScreen.dart';
 import 'package:tfocus_v_common_2/publicationScreen.dart';
+import 'package:tfocus_v_common_2/resultScreen.dart';
 import 'main.dart';
 
 GoRouter routes = GoRouter(routes: [
@@ -45,6 +46,10 @@ GoRouter routes = GoRouter(routes: [
           path: 'createPublication',
           builder: (context, state) => AddPublicationScreen()
         ),
+        GoRoute(
+          path: 'result',
+          builder: (context, state) => ResultScreen(state.extra as String)
+        )
         //GoRoute(
         //     path: 'list_by/:url',
         //      builder: (BuildContext context, GoRouterState state) =>

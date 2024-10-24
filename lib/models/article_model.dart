@@ -60,7 +60,7 @@ class Article {
   }
 }
 
-const platform = MethodChannel('com.example.topic/browser');
+const platform = MethodChannel('com.example.tfocus_v_common_2/browser');
 
 Future<void> openBrowser(String url) async {
   try {
