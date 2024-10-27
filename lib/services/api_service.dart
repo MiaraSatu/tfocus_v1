@@ -42,11 +42,7 @@ class ApiService {
   static String BASE_URL = 'http://192.168.249.83:8000/';
   static String API_URL = BASE_URL+'api';
 
-  static Map<String, String> HEADERS = {
-    'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache',
-    'Expires': '0',
-  };
+  static Map<String, String> HEADERS = {};
 
   // SPECIAL FOR PUBLICATION
   static Future<List<Publication>> fetchPublications() async {
@@ -120,22 +116,6 @@ class ApiService {
       return publications;
     } else {
       throw Exception("Failed to ");
-    }
-  }
-
-  static Future<List<Publication>> searchPublications(String q) async {
-    final response = await http.get(
-      Uri.parse("$API_URL/search/$q")
-    );
-    int status = response.statusCode;
-    if(200 <= status && status < 300) {
-      final responseData = jsonDecode(response.body);
-      List<Publication> result = List<Publication>.from(responseData.map(
-          (res) => Publication.fromMap(res as Map<String, dynamic>)
-      ));
-      return result;
-    } else {
-      throw Exception("Failed to fetch: " + response.body);
     }
   }
 

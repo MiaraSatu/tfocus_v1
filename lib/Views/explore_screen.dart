@@ -34,7 +34,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   _search(String q) {
-    // context.push("/result", extra: q);
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tfocus_v_common_2/models/publication.dart';
@@ -17,6 +19,26 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   late Future<List<Publication>> articles;
   List<bool> favoriteStates = [];
+
+  static List<String> images = [
+    "images/ext2.jpg",
+    "images/iob.jpg",
+    "images/1.jpg",
+    "images/2.jpg",
+    "images/3.jpg",
+    "images/4.jpg",
+    "images/5.jpg",
+    "images/6.jpg",
+    "images/7.jpg",
+    "images/8.jpg",
+    "images/9.jpg",
+    "images/10.jpg",
+    "images/11.png",
+    "images/dev.jpg",
+    "images/ext2.jpg",
+    "images/externalisation-de-la-paie.jpg",
+    "images/iob.jpg",
+  ];
 
   // final handler = DBHelper();
   @override
@@ -79,6 +101,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       FutureBuilder<List<Publication>>(
                         future: ApiService.fetchPublications(),
                         builder: (context, AsyncSnapshot<List<Publication>> snapshot) {
+
                           if(snapshot.hasData) {
                             List<Publication> publications = snapshot.data!;
                             return Column(

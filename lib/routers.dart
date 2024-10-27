@@ -10,7 +10,6 @@ import 'package:tfocus_v_common_2/discussionsScreen.dart';
 import 'package:tfocus_v_common_2/models/publication.dart';
 import 'package:tfocus_v_common_2/profileScreen.dart';
 import 'package:tfocus_v_common_2/publicationScreen.dart';
-import 'package:tfocus_v_common_2/resultScreen.dart';
 import 'main.dart';
 
 GoRouter routes = GoRouter(routes: [
@@ -46,10 +45,6 @@ GoRouter routes = GoRouter(routes: [
           path: 'createPublication',
           builder: (context, state) => AddPublicationScreen()
         ),
-        GoRoute(
-          path: 'result',
-          builder: (context, state) => ResultScreen(state.extra as String)
-        )
         //GoRoute(
         //     path: 'list_by/:url',
         //      builder: (BuildContext context, GoRouterState state) =>
